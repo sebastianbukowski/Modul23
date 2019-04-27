@@ -27,7 +27,7 @@ export function addNote(req, res) {
       });
   });
 }
-export async function deleteNote(req, res) {
+export function deleteNote(req, res) {
   const noteId = req.params.noteId;
   Note.findOne({ id: noteId }).exec((err, note) => {
     if (err) {
