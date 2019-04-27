@@ -4,7 +4,6 @@ import Lane from '../models/lane'
 
 export function addNote(req, res) {
   const { note, laneId } = req.body;
-
   if (!note || !note.task || !laneId) {
     res.status(400).end();
   }
@@ -28,25 +27,36 @@ export function addNote(req, res) {
       });
   });
 }
-export function deleteNote(req, res) {
+export async function deleteNote(req, res) {
   const noteId = req.params.noteId;
-  console.log("noteId", noteId)
   Note.findOne({ id: noteId }).exec((err, note) => {
     if (err) {
       res.status(500).send(err);
     }
-
-    Lane.findOne({id: req.body.laneId}).exec((err, lane) => {
-      console.log('laneId ', req.body.laneId)
-      const updatedNotes = lane.notes.filter(note => note.id !== noteId);
-        lane.notes = updatedNotes;
-        lane.save(()=> {
-          note.remove(() => {
-            res.status(200).end();
-          });
+    const note_id = note._id;
+    Lane.findOne({
+      notes: {
+        $in: [ note_id ]
+      }
+    }, {id: 1}, (err,result) => {
+      if(!err) {
+        const laneId = result.id;
+        Lane.findOne({id: laneId}).exec((err, lane) => {
+          const updatedNotes = lane.notes.filter(note => note.id !== noteId);
+            lane.notes = updatedNotes;
+            lane.save(()=> {
+              note.remove(() => {
+                res.status(200).end();
+              });
+            });
         });
-      });
-    });
+      } else {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    })
+  });
 }
 export function editNote (req, res){
   const noteId = req.params.noteId;
@@ -60,7 +70,6 @@ export function editNote (req, res){
       if (err) {
         res.status(500).end();
       }
-
       res.json(noteSaved);
     })
   });
