@@ -6,6 +6,7 @@ import NotesContainer from '../Note/NotesContainer';
 import Edit from '../../components/Edit'
 // Import Style
 import styles from './Lane.css';
+import {editLane} from './LaneActions';
 
 const Lane = (props) => {
   const { lane, laneNotes, updateLane, addNote, deleteLane } = props;

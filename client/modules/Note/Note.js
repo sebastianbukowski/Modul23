@@ -5,8 +5,10 @@ import styles from './Note.css';
 const Note = props => {
   console.log('note props',props)
   return (
+    
   <li className={styles.Note}>{props.children}</li>)
-}
+  }
+
 Note.propTypes = {
   children: PropTypes.any,
 };
