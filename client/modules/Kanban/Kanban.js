@@ -1,17 +1,17 @@
-import { createLane, fetchLanes } from '../Lane/LaneActions'
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Lanes from '../Lane/Lanes';
-
-//import styles from '../Lane/Lane.css';
+import { createLaneRequest, fetchLanes } from '../Lane/LaneActions'
+import styles from '../Lane/Lane.css';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 const Kanban = (props) => {
-  console.log('props',props)
   return (
     <div>
-      <button
+      <button className={styles.AddLane}
        onClick={() => props.createLane({
         name: 'New lane',
       })} >
@@ -21,7 +21,6 @@ const Kanban = (props) => {
     </div>
   )
 } 
-console.log(fetchLanes)
  Kanban.need = [() => { return fetchLanes(); }];
 
  Kanban.propTypes = {
@@ -34,12 +33,15 @@ const mapStateToProps = state => ({
   lanes: Object.values(state.lanes)
 });
 const mapDispatchToProps = {
-  createLane,
+  createLane: createLaneRequest,
 };
 
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Kanban);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  DragDropContext(HTML5Backend)
+)(Kanban);
 
 // Import Style

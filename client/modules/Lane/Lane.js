@@ -1,10 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-import NotesContainer from '../Note/NotesContainer';
+import NotesContainer from '../Note/NoteContainer';
 import Edit from '../../components/Edit'
-// Import Style
 import styles from './Lane.css';
 import {editLane} from './LaneActions';
 
